@@ -1,0 +1,22 @@
+<div class="d-flex justify-content-center align-items-start" style="min-height: 100vh; padding-top: 100px;">
+  <div class="card p-4" style="width: 400px;">
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+
+        <div class="m-2">
+          <label>Username: </label>
+          <input type="text" class="bg-warning" formControlName="username" placeholder="Username">
+        </div>
+
+        <div class="m-2">
+          <label>Password: </label>
+          <input type="password" class="bg-warning" formControlName="password" placeholder="password">
+        </div>
+
+        <div class="text-end">
+          <button type="submit" class="btn btn-success mt-2 " [disabled]="loginForm.invalid">Login</button>
+        </div>
+
+        <p *ngIf="errorMessage" class="error" ngClass="m-2">{{ errorMessage }}</p>
+    </form>
+  </div>
+</div>

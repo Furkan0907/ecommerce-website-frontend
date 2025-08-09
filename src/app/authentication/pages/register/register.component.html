@@ -1,0 +1,28 @@
+<div class="d-flex justify-content-center align-items-start" style="min-height: 100vh; padding-top: 100px;">
+  <div class="card p-4" style="width: 400px;">
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+      <div class="m-2">
+        <label>Username: </label>
+        <input type="text" class="bg-warning" formControlName="username" placeholder="Username">
+      </div>
+
+      <div class="m-2">
+        <label>Email: </label>
+        <input type="email" class="bg-warning" formControlName="email" placeholder="Email">
+      </div>
+
+      <div class="m-2">
+        <label>Password: </label>
+        <input type="password" class="bg-warning" formControlName="password" placeholder="password">
+      </div>
+
+      <div class="text-end mt-2">
+        <button type="submit" [disabled]="registerForm.invalid" class="btn btn-success">Register</button>
+      </div>
+
+      <p *ngIf="errorMessage" class="error m-2">{{ errorMessage }}</p>
+
+      <p *ngIf="successMessage" class="successMessage m-2">{{ successMessage }}</p>
+    </form>
+  </div>
+</div>
