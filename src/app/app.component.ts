@@ -27,6 +27,7 @@ export class AppComponent implements OnInit {
   logout() {
     this.authService.logout().subscribe(() => {
       console.log('Çıkış yapıldı');
+      this.router.navigate(['/']);
     });
   }
 }

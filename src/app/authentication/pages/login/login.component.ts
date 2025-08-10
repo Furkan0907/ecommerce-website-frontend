@@ -30,9 +30,15 @@ export class LoginComponent {
     }
 
     this.authService.login(this.loginForm.value).subscribe({
-      next: (res) => {
-        console.log('Login success', res);
-        this.router.navigate(['/']);
+      next: () => {
+        const role = this.authService.getRole();
+        if (role === 'ADMIN') {
+          this.router.navigate(['admin']);
+        } else if (role === 'SELLER') {
+          this.router.navigate(['/seller']);
+        } else {
+          this.router.navigate(['/']);
+        }
       },
       error: (err) => {
         this.errorMessage = 'Kullanıcı adı veya şifre yanlış';
