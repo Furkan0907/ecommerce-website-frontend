@@ -18,16 +18,4 @@ export class AppComponent implements OnInit {
         this.isLoggedIn = status;
       });
   }
-
-  getCurrentUsername(): string | null {
-    const user = this.authService.getCurrentUser();
-    return user ? user.username : null;
-  }
-
-  logout() {
-    this.authService.logout().subscribe(() => {
-      console.log('Çıkış yapıldı');
-      this.router.navigate(['/']);
-    });
-  }
 }

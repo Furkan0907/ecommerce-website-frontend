@@ -1,8 +1,9 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
-import { CustomerLayoutComponent } from "./customer-layout/customer-layout.component";
-import { HomeComponent } from "./home/home.component";
-import { ProfileComponent } from "./profile/profile.component";
+import { CustomerLayoutComponent } from "./pages/customer-layout/customer-layout.component";
+import { HomeComponent } from "./pages/home/home.component";
+import { ProfileComponent } from "./pages/profile/profile.component";
+import { ProductDetailComponent } from "./pages/product-detail/product-detail.component";
 
 
 const routes: Routes = [
@@ -11,7 +12,8 @@ const routes: Routes = [
     component: CustomerLayoutComponent,
     children: [
       { path: '', component: HomeComponent },
-      { path: 'profile', component: ProfileComponent }
+      { path: 'profile', component: ProfileComponent },
+      { path: 'product/:id', component: ProductDetailComponent }
     ]
   }
 ];

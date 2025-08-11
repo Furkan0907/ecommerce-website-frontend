@@ -1,0 +1,26 @@
+<div class="container mt-4">
+  <h2>Products</h2>
+
+  <div *ngIf="loading" class="alert alert-info">Loading...</div>
+  <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
+
+  <div class="row">
+    <div class="col-md-4 mb-4" *ngFor="let product of products">
+      <div class="card h-100 position-relative" style="cursor: pointer;" (click)="goToDetails(product.id)">
+        <img *ngIf="product.imageUrl" [src]="'/assets/images/' + product.imageUrl" class="card-img-top" [alt]="product.name">
+
+        <button
+        class="btn btn-warning rounded-circle position-absolute top-50 end-0 translate-middle-y me-2 text-white fs-5"
+        (click)="addToCart(product); $event.stopPropagation()"
+        title="Add To Cart">
+          +
+        </button>
+
+        <div class="card-body">
+          <h5 class="card-title">{{ product.brand }} - {{ product.name }}</h5>
+          <p class="card-text fw-bold">{{ product.price | currency:'TL'}}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

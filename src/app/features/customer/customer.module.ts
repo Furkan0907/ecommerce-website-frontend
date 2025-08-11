@@ -1,17 +1,20 @@
+import { ProfileComponent } from './pages/profile/profile.component';
 import { NgModule } from "@angular/core";
-import { HomeComponent } from "./home/home.component";
-import { ProfileComponent } from "./profile/profile.component";
+import { HomeComponent } from "./pages/home/home.component";
 import { CommonModule } from "@angular/common";
 import { RouterModule } from "@angular/router";
-import { CustomerLayoutComponent } from "./customer-layout/customer-layout.component";
+import { CustomerLayoutComponent } from "./pages/customer-layout/customer-layout.component";
 import { CustomerRotuingModule } from "./customer-routing.module";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
+import { ProductDetailComponent } from './pages/product-detail/product-detail.component';
 
 @NgModule({
   declarations: [
     HomeComponent,
     ProfileComponent,
-    CustomerLayoutComponent
+    CustomerLayoutComponent,
+    ProductDetailComponent
   ],
   imports: [
     CommonModule,
@@ -19,6 +22,7 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
     CustomerRotuingModule,
     FormsModule,
     ReactiveFormsModule,
+    NgbModule
   ]
 })
 export class CustomerModule {}

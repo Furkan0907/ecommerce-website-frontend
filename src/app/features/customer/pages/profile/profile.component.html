@@ -1,0 +1,28 @@
+<div class="p-3">
+  <h2>Your Profile</h2>
+
+  <div *ngIf="!isEditMode; else editForm">
+    <p><strong>Username: </strong> {{ currentUser?.username }}</p>
+    <p><strong>Email: </strong> {{ currentUser?.email }}</p>
+    <button class="btn btn-primary" (click)="enableEdit()">Edit</button>
+  </div>
+
+  <ng-template #editForm>
+    <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+
+      <div class="mb-3">
+        <label for="username" class="form-label">Username</label>
+        <input class="form-control" formControlName="username" id="username">
+      </div>
+
+      <div class="mb-3">
+        <label for="email" class="form-label">Email</label>
+        <input class="form-control" formControlName="email" type="email" id="email">
+      </div>
+
+      <button type="submit" class="btn btn-primary" [disabled]="!profileForm.valid">Save</button>
+      <button type="button" class="btn btn-secondary mx-3" (click)="cancelEdit()">Cancel</button>
+    </form>
+  </ng-template>
+</div>
+

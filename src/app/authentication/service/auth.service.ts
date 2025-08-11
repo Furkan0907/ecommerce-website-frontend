@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { enviroment } from '../../../environments/environment';
+import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, of, retry, tap } from 'rxjs';
 import { RegisterRequest } from '../../core/models/register-request';
@@ -10,7 +10,7 @@ import { AuthResponse } from '../../core/models/auth-response';
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = enviroment.apiUrl + "/auth";
+  private apiUrl = environment.apiUrl + "/auth";
   private accessTokenKey = 'access_token';
   private refreshTokenKey = 'refresh_token';
   private roleKey = 'role';
@@ -110,7 +110,7 @@ export class AuthService {
     }
   }
 
-  getCurrentUser(): {username: string; email?: string} | null {
+  getCurrentUser(): {id: number, username: string; email?: string} | null {
     const token = this.getAccessToken();
     if (!token) return null;
 
@@ -118,6 +118,7 @@ export class AuthService {
     if (!payload) return null;
 
     return {
+      id: payload.id,
       username: payload.sub,
       email: payload.email
     };
