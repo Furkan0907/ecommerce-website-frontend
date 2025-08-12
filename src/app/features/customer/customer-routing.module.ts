@@ -4,6 +4,7 @@ import { CustomerLayoutComponent } from "./pages/customer-layout/customer-layout
 import { HomeComponent } from "./pages/home/home.component";
 import { ProfileComponent } from "./pages/profile/profile.component";
 import { ProductDetailComponent } from "./pages/product-detail/product-detail.component";
+import { CartComponent } from "./pages/cart/cart.component";
 
 
 const routes: Routes = [
@@ -13,7 +14,8 @@ const routes: Routes = [
     children: [
       { path: '', component: HomeComponent },
       { path: 'profile', component: ProfileComponent },
-      { path: 'product/:id', component: ProductDetailComponent }
+      { path: 'product/:id', component: ProductDetailComponent },
+      { path: 'cart', component: CartComponent }
     ]
   }
 ];

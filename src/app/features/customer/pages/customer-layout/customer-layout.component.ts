@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../../../authentication/service/auth.service';
 import { Router } from '@angular/router';
+import { CartService } from '../../../../core/services/cart.service';
 
 @Component({
   selector: 'app-customer-layout',
@@ -8,9 +9,20 @@ import { Router } from '@angular/router';
   templateUrl: './customer-layout.component.html',
   styleUrl: './customer-layout.component.css'
 })
-export class CustomerLayoutComponent {
+export class CustomerLayoutComponent implements OnInit {
   isCollapsed = true;
-  constructor(private authService: AuthService, private router: Router) { }
+  cartItemCount = 0;
+
+  constructor(private authService: AuthService, private router: Router, private cartService: CartService) { }
+
+  ngOnInit(): void {
+      this.cartService.cartItemCount$.subscribe(count => {
+        console.log('Cart item count:', count);
+        this.cartItemCount = count;
+      });
+
+      this.cartService.loadCartItemCount();
+  }
 
   logout() {
     this.authService.logout().subscribe(() => {

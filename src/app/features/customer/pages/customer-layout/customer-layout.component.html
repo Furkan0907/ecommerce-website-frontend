@@ -6,18 +6,40 @@
 
     <ul class="navbar-nav ms-auto align-items-center">
 
-      <li class="nav-item"><a class="nav-link" routerLink="/">Home</a></li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/" title="Home">
+          <i class="bi bi-house-door-fill" style="font-size: 1.3rem;"></i>
+        </a>
+      </li>
 
-      <li class="nav-item"><a class="nav-link" routerLink="/profile">Profile</a></li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/profile" title="Profile">
+          <i class="bi bi-person-circle" style="font-size: 1.3rem;"></i>
+        </a>
+      </li>
 
       <li class="nav-item">
         <span class="border border-primary bg-light px-2 py-1 rounded me-3">{{ getCurrentUsername() }}</span>
       </li>
 
-      <li class="nav-item"><a class="nav-link text-white border border-danger px-2 py-1 rounded bg-danger me-3" (click)="logout()" style="cursor:pointer ">Logout</a></li>
+      <li class="nav-item position-relative">
+        <a class="nav-link me-3" routerLink="/cart" title="Cart">
+          <i class="bi bi-cart-fill" style="font-size: 1.3rem;"></i>
+          <span *ngIf="cartItemCount > 0" class="position-absolute top-0 star-100 translate-middle badge rounded-pill bg-danger">{{ cartItemCount }}
+            <span class="visually-hidden">Number of products in the cart</span>
+          </span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link text-white border border-danger px-2 py-1 rounded bg-danger me-3" (click)="logout()"
+        style="cursor:pointer"
+        title="Logout">
+          <i class="bi bi-box-arrow-right" style="font-size: 1.3rem;"></i>
+        </a>
+      </li>
 
     </ul>
-
   </div>
 
 </nav>

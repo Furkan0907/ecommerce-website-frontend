@@ -4,6 +4,7 @@ import { ProductService } from '../../../../core/services/product.service';
 import { Router } from '@angular/router';
 import { CartService } from '../../../../core/services/cart.service';
 import { AuthService } from '../../../../authentication/service/auth.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-home',
@@ -20,7 +21,9 @@ export class HomeComponent implements OnInit {
     private productService: ProductService,
     private cartService: CartService,
     private authService: AuthService,
-    private router: Router) { }
+    private router: Router,
+    private toastr: ToastrService
+  ) { }
 
   ngOnInit(): void {
     this.loadProducts();
@@ -60,11 +63,11 @@ export class HomeComponent implements OnInit {
     }
 
     this.cartService.addItemToCart(userId, product.id).subscribe({
-      next: (cartItem) => {
-        console.log('Added to cart:', cartItem);
+      next: () => {
+        this.toastr.success(`${product.name} added to cart!`);
       },
       error: (err) => {
-        console.error('Error while adding to cart:', err);
+        this.toastr.error('Error while adding to cart');
       }
     });
   }
