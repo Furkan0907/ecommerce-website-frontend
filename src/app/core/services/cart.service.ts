@@ -3,27 +3,9 @@ import { Injectable } from "@angular/core";
 import { environment } from "../../../environments/environment";
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { BehaviorSubject, map, Observable } from "rxjs";
-import { ApiResponse } from "../models/api-response";
-
-export interface CartItem {
-  id: number;
-  product: {
-    id: number;
-    name: string;
-    price: number;
-    description?: string;
-    stockQuantity: number;
-    category: string;
-    brand: string;
-    imageUrl?: string;
-  };
-  quantity: number;
-}
-
-export interface Cart {
-  id: number,
-  cartItems: CartItem[]
-}
+import { BaseResponse } from "../models/base-response.model";
+import { Cart, CartItem } from '../models/cart.model';
+import { Order } from '../models/order.model';
 
 @Injectable({
   providedIn: 'root'
@@ -44,10 +26,12 @@ export class CartService {
       this.cartItemCountSubject.next(0);
       return;
     }
-    this.http.get<ApiResponse<CartItem[]>>(`/api/carts/${userId}/items`).subscribe({
+    this.http.get<BaseResponse<CartItem[]>>(`${this.apiUrl}/${userId}/items`).subscribe({
       next: (response) => {
-        const count = response.payload.reduce((acc, item) => acc + item.quantity, 0);
-        this.cartItemCountSubject.next(count);
+        if (response.status === 200 && response.payload) {
+          const count = response.payload.length;
+          this.cartItemCountSubject.next(count);
+        }
       },
       error: () => this.cartItemCountSubject.next(0)
     });
@@ -57,36 +41,69 @@ export class CartService {
     this.cartItemCountSubject.next(newCount);
   }
 
-  addItemToCart(userId: number, productId: number, quantity: number = 1): Observable<CartItem> {
-    const params = new HttpParams()
-    .set('productId', productId.toString())
-    .set('quantity', quantity.toString());
-
-    return this.http.post<ApiResponse<CartItem>>(`${this.apiUrl}/${userId}/items`,
-      null,
-      { params }
-    ).pipe(
-      map(response => {
-        if (response.status === 200 && response.payload) {
-          return response.payload;
+  getCartById(id: number): Observable<Cart> {
+    return this.http.get<BaseResponse<Cart>>(`${this.apiUrl}/${id}`).pipe(
+      map(res => {
+        if (res.status === 200 && res.payload) {
+          return res.payload;
         } else {
-          throw new Error(response.error || 'Can not add to cart');
+          throw new Error(res.exception?.message);
         }
       })
     );
   }
 
-  getCartByUserId(userId: number): Observable<{ cartItems: CartItem[] }> {
-    return this.http.get<{ cartItems: CartItem[] }>(`${this.apiUrl}/by-user-id/${userId}`);
+  getAllCarts(): Observable<Cart[]> {
+    return this.http.get<BaseResponse<Cart[]>>(this.apiUrl).pipe(
+      map(res => {
+        if(res.status === 200 && res.payload) {
+          return res.payload;
+        } else {
+          throw new Error(res.exception?.message);
+        }
+      })
+    );
+  }
+
+  addItemToCart(userId: number, productId: number, quantity: number = 1): Observable<CartItem> {
+    const params = new HttpParams()
+    .set('productId', productId.toString())
+    .set('quantity', quantity.toString());
+
+    return this.http.post<BaseResponse<CartItem>>(`${this.apiUrl}/${userId}/items`,
+      null,
+      { params }
+    ).pipe(
+      map(response => {
+        if (response.status === 200 && response.payload) {
+          this.loadCartItemCount();
+          return response.payload;
+        } else {
+          throw new Error('Can not add to cart');
+        }
+      })
+    );
+  }
+
+  getCartByUserId(userId: number): Observable<CartItem[]> {
+    return this.http.get<BaseResponse<CartItem[]>>(`${this.apiUrl}/by-user-id/${userId}`).pipe(
+      map(res => {
+        if (res.status === 200 && res.payload) {
+          return res.payload;
+        } else {
+          throw new Error('Kullanıcının sepeti boş');
+        }
+      })
+    );
   }
 
   getCartItems(userId: number): Observable<CartItem[]> {
-    return this.http.get<ApiResponse<CartItem[]>>(`${this.apiUrl}/${userId}/items`).pipe(
+    return this.http.get<BaseResponse<CartItem[]>>(`${this.apiUrl}/${userId}/items`).pipe(
       map(response => {
         if (response.status === 200 && response.payload) {
           return response.payload;
         } else {
-          throw new Error(response.error || 'Cart item has not get')
+          throw new Error('Cart item has not get')
         }
       })
     );
@@ -97,12 +114,12 @@ export class CartService {
     .set('productId', productId.toString())
     .set('quantity', quantity.toString());
 
-    return this.http.put<ApiResponse<CartItem>>(`${this.apiUrl}/${userId}/items`, null, { params }).pipe(
+    return this.http.put<BaseResponse<CartItem>>(`${this.apiUrl}/${userId}/items`, null, { params }).pipe(
       map(response => {
         if (response.status === 200 && response.payload) {
           return response.payload;
         } else {
-          throw new Error(response.error || 'Product quantity updated');
+          throw new Error('Product quantity could not be updated');
         }
       })
     );
@@ -111,24 +128,38 @@ export class CartService {
   removeItemFromCart(userId: number, productId: number): Observable<void> {
     const params = new HttpParams().set('productId', productId.toString());
 
-    return this.http.delete<ApiResponse<void>>(`${this.apiUrl}/${userId}/items`, { params }).pipe(
+    return this.http.delete<BaseResponse<void>>(`${this.apiUrl}/${userId}/items`, { params }).pipe(
       map(response => {
         if (response.status === 200) {
+          this.loadCartItemCount();
           return;
         } else {
-          throw new Error(response.error || 'Product could not been removed from the cart');
+          throw new Error('Product could not been removed from the cart');
         }
       })
     );
   }
 
   clearCart(userId: number): Observable<void> {
-    return this.http.delete<ApiResponse<void>>(`${this.apiUrl}/${userId}/clear`).pipe(
+    return this.http.delete<BaseResponse<void>>(`${this.apiUrl}/${userId}/clear`).pipe(
       map(response => {
         if (response.status === 200) {
+          this.loadCartItemCount();
           return;
         } else {
-          throw new Error(response.error || 'Cart could not cleared');
+          throw new Error('Cart could not cleared');
+        }
+      })
+    );
+  }
+
+  confirmCart(userId: number, addressId: number): Observable<Order> {
+    return this.http.post<BaseResponse<Order>>(`${this.apiUrl}/${userId}/confirm`, addressId).pipe(
+      map(res => {
+        if (res.status === 200 && res.payload) {
+          return res.payload;
+        } else {
+          throw new Error(res.exception?.message);
         }
       })
     );

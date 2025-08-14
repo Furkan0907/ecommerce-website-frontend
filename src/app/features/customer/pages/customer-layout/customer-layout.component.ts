@@ -17,7 +17,6 @@ export class CustomerLayoutComponent implements OnInit {
 
   ngOnInit(): void {
       this.cartService.cartItemCount$.subscribe(count => {
-        console.log('Cart item count:', count);
         this.cartItemCount = count;
       });
 

@@ -2,8 +2,10 @@
   <h2>Your Profile</h2>
 
   <div *ngIf="!isEditMode; else editForm">
-    <p><strong>Username: </strong> {{ currentUser?.username }}</p>
-    <p><strong>Email: </strong> {{ currentUser?.email }}</p>
+    <p><strong>Username: </strong> {{ currentUser.username }}</p>
+    <p><strong>Email: </strong> {{ currentUser.email }}</p>
+    <p><strong>Password: </strong>*******</p>
+    <p><strong>Role: </strong>{{ currentUser.role }}</p>
     <button class="btn btn-primary" (click)="enableEdit()">Edit</button>
   </div>
 
@@ -13,11 +15,35 @@
       <div class="mb-3">
         <label for="username" class="form-label">Username</label>
         <input class="form-control" formControlName="username" id="username">
+        <div *ngIf="profileForm.get('username')?.touched && profileForm.get('username')?.invalid" class="text-danger">Username required.</div>
       </div>
 
       <div class="mb-3">
         <label for="email" class="form-label">Email</label>
         <input class="form-control" formControlName="email" type="email" id="email">
+        <div *ngIf="profileForm.get('email')?.touched && profileForm.get('email')?.invalid" class="text-danger">Please enter a valid email.</div>
+      </div>
+
+      <div class="mb-3">
+        <label for="password" class="form-label">Password</label>
+        <div class="password-wrapper">
+          <input [type]="showPassword ? 'text' : 'password'" formControlName="password" id="password" class="form-control">
+          <i class="fa"
+             [ngClass]="{ 'fa-eye': !showPassword, 'fa-eye-slash': showPassword, 'password-toggle': true, 'active': showPassword }"
+             (click)="togglePassword()"></i>
+        </div>
+        <div *ngIf="profileForm.get('password')?.touched && profileForm.get('password')?.invalid" class="text-danger">Password must be at least 6 characters.</div>
+      </div>
+
+      <div class="mb-3">
+        <label for="confirmPassword" class="form-label">Confirm Password</label>
+        <div class="password-wrapper">
+          <input [type]="showConfirmPassword ? 'text' : 'password'" formControlName="confirmPassword" id="confirmPassword" class="form-control">
+          <i class="fa"
+             [ngClass]="{ 'fa-eye': !showConfirmPassword, 'fa-eye-slash': showConfirmPassword, 'password-toggle': true, 'active': showConfirmPassword }"
+             (click)="toggleConfirmPassword()"></i>
+        </div>
+        <div *ngIf="profileForm.hasError('passwordMismatch') && profileForm.get('confirmPassword')?.touched" class="text-danger">Passwords do not match.</div>
       </div>
 
       <button type="submit" class="btn btn-primary" [disabled]="!profileForm.valid">Save</button>
@@ -25,4 +51,3 @@
     </form>
   </ng-template>
 </div>
-

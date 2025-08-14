@@ -1,10 +1,11 @@
+import { BaseResponse } from './../../core/models/base-response.model';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
-import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, of, retry, tap } from 'rxjs';
-import { RegisterRequest } from '../../core/models/register-request';
-import { AuthRequest } from '../../core/models/auth-request';
-import { AuthResponse } from '../../core/models/auth-response';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { BehaviorSubject, map, Observable, of, tap } from 'rxjs';
+import { RegisterRequest } from '../../core/models/auth.model';
+import { AuthRequest } from '../../core/models/auth.model';
+import { AuthResponse } from '../../core/models/auth.model';
 
 @Injectable({
   providedIn: 'root'
@@ -25,15 +26,28 @@ export class AuthService {
     this.loggedIn$.next(this.hasValidToken());
   }
 
-  register(request: RegisterRequest): Observable<any> {
-    return this.http.post(`${this.apiUrl}/register`, request);
+  register(request: RegisterRequest): Observable<AuthResponse> {
+    return this.http.post<BaseResponse<AuthResponse>>(`${this.apiUrl}/register`, request).pipe(
+      map(res => {
+        if (res.status === 200 && res.payload) {
+          return res.payload;
+        } else {
+          throw new Error('Kayıt yapılamadı');
+        }
+      })
+    )
   }
 
-  login(request: AuthRequest): Observable<any> {
-    return this.http.post<AuthResponse>(`${this.apiUrl}/authenticate`, request).pipe(
-      tap(res => {
-        this.storeTokens(res.payload.accessToken, res.payload.refreshToken, res.payload.role);
-        this.loggedIn$.next(true);
+  login(request: AuthRequest): Observable<AuthResponse> {
+    return this.http.post<BaseResponse<AuthResponse>>(`${this.apiUrl}/authenticate`, request).pipe(
+      map(res => {
+        if (res.status === 200 && res.payload) {
+          this.storeTokens(res.payload.accessToken, res.payload.refreshToken, res.payload.role);
+          this.loggedIn$.next(true);
+          return res.payload;
+        } else {
+          throw new Error('Giriş başarısız');
+        }
       })
     );
   }
@@ -45,7 +59,7 @@ export class AuthService {
       this.loggedIn$.next(false);
       return of(null);
     }
-    return this.http.post(`${this.apiUrl}/logout`, { refreshToken }).pipe(
+    return this.http.post<BaseResponse<AuthResponse>>(`${this.apiUrl}/logout`, { refreshToken }).pipe(
       tap(() => {
         this.clearTokens();
         this.loggedIn$.next(false);
@@ -78,11 +92,16 @@ export class AuthService {
     return expiryDate > new Date();
   }
 
-  refreshToken() {
+  refreshToken(): Observable<AuthResponse> {
     const refreshToken = this.getRefreshToken();
-    return this.http.post<AuthResponse>(`${this.apiUrl}/refresh-token`, { refreshToken }).pipe(
-      tap((res) => {
-        this.storeTokens(res.payload.accessToken, res.payload.refreshToken, res.payload.role);
+    return this.http.post<BaseResponse<AuthResponse>>(`${this.apiUrl}/refresh-token`, { refreshToken }).pipe(
+      map((res) => {
+        if (res.payload) {
+          this.storeTokens(res.payload.accessToken, res.payload.refreshToken, res.payload.role);
+          return res.payload;
+        } else {
+          throw new Error('Token yenileme başarısız');
+        }
       })
     );
   }
@@ -122,5 +141,31 @@ export class AuthService {
       username: payload.sub,
       email: payload.email
     };
+  }
+
+  checkEmailExists(email: string): Observable<boolean> {
+    const params = new HttpParams().set('email', email);
+    return this.http.get<BaseResponse<boolean>>(`${this.apiUrl}/check-email`, { params }).pipe(
+      map(res => {
+        if (res.status === 200 && res.payload !== undefined) return res.payload;
+        throw new Error(res.exception?.message);
+      })
+    );
+  }
+
+  resetPassword(email: string, newPassword: string): Observable<void> {
+    const params = new HttpParams()
+    .set('email', email)
+    .set('newPassword', newPassword);
+
+    return this.http.put<BaseResponse<void>>(`${this.apiUrl}/reset-password`, null, { params }).pipe(
+      map(res => {
+        if (res.status === 200) {
+          return;
+        } else {
+          throw new Error(res.exception?.message);
+        }
+      })
+    );
   }
 }

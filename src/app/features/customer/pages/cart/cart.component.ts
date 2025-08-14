@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { CartItem, CartService } from '../../../../core/services/cart.service';
+import { CartService } from '../../../../core/services/cart.service';
+import { CartItem } from '../../../../core/models/cart.model';
 import { AuthService } from '../../../../authentication/service/auth.service';
 import { Location } from '@angular/common';
+import { AddressService } from '../../../../core/services/address.service';
 
 @Component({
   selector: 'app-cart',
@@ -13,11 +15,14 @@ export class CartComponent implements OnInit {
 
   cartItems: CartItem[] = [];
   currentUserId!: number;
+  addresses = [];
+  selectedAddressId = 0;
 
   constructor(
     private cartService: CartService,
     private authService: AuthService,
-    private location: Location
+    private location: Location,
+    private addressService: AddressService
   ) { }
 
   ngOnInit(): void {
@@ -25,6 +30,18 @@ export class CartComponent implements OnInit {
       if (user && user.id) {
         this.currentUserId = user.id;
         this.loadCartItems();
+
+        this.addressService.getByUserId(user.id).subscribe({
+          next: (addresses) => {
+            addresses = addresses;
+            if (addresses.length > 0) {
+              this.selectedAddressId = addresses[0].id;
+            }
+          },
+          error: () => {
+            console.log('Adresler yüklenemedi');
+          }
+        });
       } else {
         console.log('Kullanıcı bulunamadı, sepet yüklenemiyor.');
       }
@@ -99,7 +116,20 @@ export class CartComponent implements OnInit {
       return;
     }
 
-    console.log('Sepet onaylandı. Sonradan backendle bağlayacağız');
+    if (!this.selectedAddressId) {
+      alert('Lütfen teslimat adresi seçiniz');
+      return;
+    }
+
+    this.cartService.confirmCart(this.currentUserId, this.selectedAddressId).subscribe({
+      next: (order) => {
+        alert('Siparişiniz başarıyla oluşturuldu');
+        this.loadCartItems();
+      },
+      error: (err) => {
+        alert('Sipariş oluşturulamadı ' + (err.message || 'Bilinmeyen hata'));
+      }
+    });
   }
 
   goBack(): void {

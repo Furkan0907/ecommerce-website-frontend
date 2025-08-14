@@ -16,6 +16,10 @@
           <input type="password" class="bg-warning" formControlName="password" placeholder="Password">
         </div>
 
+        <div>
+          <a class="forgot-password-link" (click)="forgotPassword()">Forgot Password?</a>
+        </div>
+
         <p *ngIf="errorMessage" class="text-danger small mb-3">{{ errorMessage }}</p>
 
         <div class="text-end">

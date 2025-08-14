@@ -2,3 +2,19 @@ label {
   display: inline-block;
   width: 90px;
 }
+
+.forgot-password-link {
+  display: inline-block;
+  padding: 4px 10px;
+  font-size: 0.875rem;
+  background-color: #007bff;
+  color: white;
+  border-radius: 4px;
+  text-decoration: none;
+  transition: background-color 0.3s;
+  cursor: pointer;
+}
+
+.forgot-password-link:hover {
+  background-color: #0056b3;
+}
