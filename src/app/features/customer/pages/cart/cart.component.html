@@ -5,11 +5,6 @@
     Your cart is empty.
   </div>
 
-  <button class="btn btn-outline-primary d-flex align-items-center mb-3" (click)="goBack()">
-    <i class="bi bi-arrow-left me-2"></i>
-    <span>Back</span>
-  </button>
-
   <div *ngIf="cartItems.length > 0">
     <div class="row gx-0 border rounded-3 mb-3 p-3 align-items-center" *ngFor="let item of cartItems; let i = index">
 

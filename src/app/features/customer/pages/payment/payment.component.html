@@ -1,0 +1,19 @@
+<div class="payment-container">
+  <h2>Payment</h2>
+
+  <div *ngIf="isLoading" class="spinner">
+    Payment is being forwarded...
+  </div>
+
+  <div *ngIf="!isLoading">
+    <label for="paymentMethod">Payment Method:</label>
+    <select #paymentMethod id="paymentMethod">
+      <option value="CREDIT_CARD">Credit Card</option>
+      <option value="CASH_ON_DELIVERY">Cash on Delivery</option>
+    </select>
+
+    <button (click)="pay(1, paymentMethod.value)" class="btn btn-primary">
+      Go to Payment
+    </button>
+  </div>
+</div>

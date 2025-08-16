@@ -3,13 +3,13 @@ import { DtoBase } from "./dto-base.model";
 export interface Payment extends DtoBase {
   orderId: number;
   amount: number;
-  paymentMethod: number;
+  method: string;
   transactionId?: string;
-  paymentStatus: string;
+  status: string;
 }
 
-export interface PaymentRequest {
+export interface PaymentIU {
   orderId: number;
-  paymentMethod: string;
+  method: string;
   transactionId?: string;
 }

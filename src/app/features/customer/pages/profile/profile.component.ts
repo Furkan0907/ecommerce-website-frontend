@@ -3,6 +3,7 @@ import { AuthService } from '../../../../authentication/service/auth.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { User, UserRequest } from '../../../../core/models/user.model';
 import { UserService } from '../../../../core/services/user.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
@@ -22,7 +23,8 @@ export class ProfileComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private userService: UserService
+    private userService: UserService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -113,5 +115,13 @@ export class ProfileComponent implements OnInit {
 
   toggleConfirmPassword() {
     this.showConfirmPassword = !this.showConfirmPassword;
+  }
+
+  myOrders() {
+    this.router.navigate(['profile/my-orders']);
+  }
+
+  myAddresses() {
+    this.router.navigate(['profile/my-addresses']);
   }
 }

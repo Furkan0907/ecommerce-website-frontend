@@ -1,0 +1,47 @@
+<div class="container mt-4" style="max-width: 500px;">
+  <h3 class="mb-3">{{ addressId ? 'Edit Address' : 'Add Address' }}</h3>
+
+  <form [formGroup]="addressForm" (ngSubmit)="onSubmit()">
+
+    <div class="mb-3">
+      <label for="city" class="form-label">City</label>
+      <input type="text" id="city" class="form-control" formControlName="city" placeholder="Enter city">
+      <div *ngIf="addressForm.get('city')?.touched && addressForm.get('city')?.invalid" class="text-danger">
+        City is required
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label for="district" class="form-label">District</label>
+      <input type="text" id="district" class="form-control" formControlName="district" placeholder="Enter district">
+      <div *ngIf="addressForm.get('district')?.touched && addressForm.get('district')?.invalid" class="text-danger">
+        District is required
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label for="fullAddress" class="form-label">Full Address</label>
+      <textarea id="fullAddress" class="form-control" formControlName="fullAddress" rows="3" placeholder="Enter full address"></textarea>
+      <div *ngIf="addressForm.get('fullAddress')?.touched && addressForm.get('fullAddress')?.invalid" class="text-danger">
+        Full address is required
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label for="phoneNumber" class="form-label">Phone Number</label>
+      <input type="text" id="phoneNumber" class="form-control" formControlName="phoneNumber" placeholder="Enter phone number">
+      <div *ngIf="addressForm.get('phoneNumber')?.touched && addressForm.get('phoneNumber')?.invalid" class="text-danger">
+        Please enter a valid phone number
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary w-100" [disabled]="!addressForm.valid">
+      {{ addressId ? 'Update Address' : 'Save Address' }}
+    </button>
+
+    <button type="button" class="btn btn-secondary w-100 mt-2" (click)="cancel()">
+      Cancel
+    </button>
+
+  </form>
+</div>

@@ -9,6 +9,11 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
 import { ProductDetailComponent } from './pages/product-detail/product-detail.component';
 import { CartComponent } from './pages/cart/cart.component';
+import { OrderComponent } from './pages/order/order.component';
+import { MyOrdersComponent } from './pages/my-orders/my-orders.component';
+import { MyAddressesComponent } from './pages/my-addresses/my-addresses.component';
+import { AddressComponent } from './pages/address/address.component';
+import { PaymentComponent } from './pages/payment/payment.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +21,12 @@ import { CartComponent } from './pages/cart/cart.component';
     ProfileComponent,
     CustomerLayoutComponent,
     ProductDetailComponent,
-    CartComponent
+    CartComponent,
+    OrderComponent,
+    MyOrdersComponent,
+    MyAddressesComponent,
+    AddressComponent,
+    PaymentComponent
   ],
   imports: [
     CommonModule,

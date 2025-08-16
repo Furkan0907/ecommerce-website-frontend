@@ -4,6 +4,7 @@ import { CartItem } from '../../../../core/models/cart.model';
 import { AuthService } from '../../../../authentication/service/auth.service';
 import { Location } from '@angular/common';
 import { AddressService } from '../../../../core/services/address.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-cart',
@@ -22,7 +23,8 @@ export class CartComponent implements OnInit {
     private cartService: CartService,
     private authService: AuthService,
     private location: Location,
-    private addressService: AddressService
+    private addressService: AddressService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -124,15 +126,12 @@ export class CartComponent implements OnInit {
     this.cartService.confirmCart(this.currentUserId, this.selectedAddressId).subscribe({
       next: (order) => {
         alert('Siparişiniz başarıyla oluşturuldu');
+        this.router.navigate([`order/${order.id}`]);
         this.loadCartItems();
       },
       error: (err) => {
         alert('Sipariş oluşturulamadı ' + (err.message || 'Bilinmeyen hata'));
       }
     });
-  }
-
-  goBack(): void {
-    this.location.back();
   }
 }

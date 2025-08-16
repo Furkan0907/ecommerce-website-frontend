@@ -1,15 +1,20 @@
 <div class="p-3">
   <h2>Your Profile</h2>
 
-  <div *ngIf="!isEditMode; else editForm">
+  <div *ngIf="!isEditMode && currentUser; else editForm">
     <p><strong>Username: </strong> {{ currentUser.username }}</p>
     <p><strong>Email: </strong> {{ currentUser.email }}</p>
     <p><strong>Password: </strong>*******</p>
     <p><strong>Role: </strong>{{ currentUser.role }}</p>
     <button class="btn btn-primary" (click)="enableEdit()">Edit</button>
+
+    <button class="btn btn-warning mx-3" (click)="myOrders()">My Orders</button>
+
+    <button class="btn btn-success" (click)="myAddresses()">My Addresses</button>
   </div>
 
   <ng-template #editForm>
+    <ng-container *ngIf="profileForm">
     <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
 
       <div class="mb-3">
@@ -49,5 +54,6 @@
       <button type="submit" class="btn btn-primary" [disabled]="!profileForm.valid">Save</button>
       <button type="button" class="btn btn-secondary mx-3" (click)="cancelEdit()">Cancel</button>
     </form>
+    </ng-container>
   </ng-template>
 </div>

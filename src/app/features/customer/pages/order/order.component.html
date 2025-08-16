@@ -1,0 +1,84 @@
+<div class="container mt-4" *ngIf="!loading && order">
+  <h2>Order #{{ order.id }}</h2>
+  <p><strong>Status: </strong>{{ order.status }}</p>
+  <p><strong>Total Amount: </strong>{{ order.totalAmount | currency:'TRY' }}</p>
+  <p><strong>Address: </strong>{{ order.address.district }}, {{ order.address.city }}</p>
+  <p *ngIf="addressDetail"><strong>Full Address: </strong>{{ order.address.fullAddress }}</p>
+  <button class="btn btn-sm btn-outline-primary" (click)="toggleAddressDetailClick()">Address Details</button>
+  <button class="btn btn-sm btn-outline-primary ms-3" (click)="toggleAddressChange()">Change Address</button>
+
+
+  <div *ngIf="isAddressChanging" class="mt-2">
+    <select [(ngModel)]="selectedAddressId" class="form-select w-auto d-inline-block me-2">
+      <option *ngFor="let addr of addresses" [value]="addr.id">
+        {{ addr.city }} / {{ addr.district }} / {{ addr.fullAddress }}
+      </option>
+    </select>
+    <button class="btn btn-success btn-sm me-2" (click)="changeAddress()">Save</button>
+    <button class="btn btn-secondary btn-sm" (click)="toggleAddressChange()">Cancel</button>
+  </div>
+
+  <h4 class="mt-4">Order Items</h4>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Product</th>
+        <th>Quantity</th>
+        <th>Price</th>
+        <th>Subtotal</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of order.orderItems">
+        <td>{{ item.product.name }}</td>
+        <td>{{ item.quantity }}</td>
+        <td>{{ item.price | currency:'TRY'}}</td>
+        <td>{{ item.price * item.quantity | currency:'TRY' }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+
+  <div *ngIf="order.status == 'PENDING'; else detailsTpl">
+    <hr class="my-4">
+    <h3>Payment</h3>
+    <div *ngIf="!paymentLoading">
+      <label for="paymentMethod">Payment Method:</label>
+      <select #paymentMethod id="paymentMethod" class="form-select w-auto d-inline-block me-2">
+        <option value="CREDIT_CARD">Credit Card</option>
+        <option value="CASH_ON_DELIVERY">Cash on Delivery</option>
+      </select>
+
+      <button class="btn btn-primary" (click)="pay(order.id, paymentMethod.value)">
+        Pay Now
+      </button>
+    </div>
+
+    <div *ngIf="paymentLoading" class="mt-2">
+      <p>Redirecting to payment...</p>
+    </div>
+  </div>
+
+  <ng-template #detailsTpl>
+    <h3>Payment Details</h3>
+
+  <div *ngIf="payment" class="card p-3">
+    <h4>Payment Information</h4>
+    <p><strong>Payment Method:</strong> {{ payment.method }}</p>
+    <p><strong>Transaction ID:</strong> {{ payment.transactionId }}</p>
+    <p><strong>Status:</strong> {{ payment.status }}</p>
+  </div>
+  </ng-template>
+
+
+
+  <a routerLink="/profile/my-orders" class="btn btn-secondary mt-3">Back to My Orders</a>
+</div>
+
+<div class="container mt-4" *ngIf="loading">
+  <p>Loading order details...</p>
+</div>
+
+<div class="container mt-4" *ngIf="error">
+  <p class="text-danger">{{ error }}</p>
+</div>

@@ -25,6 +25,18 @@ export class AddressService {
     );
   }
 
+  getById(id: number): Observable<Address> {
+    return this.http.get<BaseResponse<Address>>(`${this.apiUrl}/${id}`).pipe(
+      map(res => {
+        if (res.status === 200 && res.payload) {
+          return res.payload;
+        } else {
+          throw new Error(res.exception?.message);
+        }
+      })
+    );
+  }
+
   getByUserId(userId: number): Observable<Address[]> {
     return this.http.get<BaseResponse<Address[]>>(`${this.apiUrl}/user/${userId}`).pipe(
       map(res => {

@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { environment } from "../../../environments/environment";
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { map, Observable } from "rxjs";
-import { Payment } from "../models/payment.model";
+import { Payment, PaymentIU } from "../models/payment.model";
 import { BaseResponse } from "../models/base-response.model";
 
 @Injectable({
@@ -13,11 +13,11 @@ export class PaymentService {
 
   constructor(private http: HttpClient) { }
 
-  create(input: PaymentRequest): Observable<Payment> {
+  create(input: PaymentIU): Observable<Payment> {
     return this.http.post<BaseResponse<Payment>>(this.apiUrl, input).pipe(
       map(res => {
         if (res.status === 200 && res.payload) {
-          return res.payload
+          return res.payload;
         } else {
           throw new Error(res.exception?.message);
         }
@@ -25,11 +25,11 @@ export class PaymentService {
     );
   }
 
-  getById(id: number): Observable<Payment> {
-    return this.http.get<BaseResponse<Payment>>(`${this.apiUrl}/${id}`).pipe(
+  getByOrderId(orderId: number): Observable<Payment> {
+    return this.http.get<BaseResponse<Payment>>(`${this.apiUrl}/by-order-id/${orderId}`).pipe(
       map(res => {
         if (res.status === 200 && res.payload) {
-          return res.payload
+          return res.payload;
         } else {
           throw new Error(res.exception?.message);
         }
@@ -41,7 +41,7 @@ export class PaymentService {
     return this.http.get<BaseResponse<Payment[]>>(`${this.apiUrl}/by-user-id/${userId}`).pipe(
       map(res => {
         if (res.status === 200 && res.payload) {
-          return res.payload
+          return res.payload;
         } else {
           throw new Error(res.exception?.message);
         }
@@ -53,7 +53,7 @@ export class PaymentService {
     return this.http.get<BaseResponse<boolean>>(`${this.apiUrl}/has-successful/${orderId}`).pipe(
       map(res => {
         if (res.status === 200 && res.payload !== undefined) {
-          return res.payload
+          return res.payload;
         } else {
           throw new Error(res.exception?.message);
         }
