@@ -1,20 +1,20 @@
 import { Injectable } from "@angular/core";
 import { environment } from "../../../environments/environment";
 import { HttpClient } from "@angular/common/http";
-import { Order, OrderRequest } from "../models/order.model";
+import { OrderItem, OrderItemRequest } from "../models/order.model";
 import { map, Observable } from "rxjs";
 import { BaseResponse } from "../models/base-response.model";
 
 @Injectable({
   providedIn: 'root'
 })
-export class OrderService {
-  private apiUrl = environment.apiUrl + '/orders';
+export class OrderItemService {
+  private apiUrl = environment.apiUrl + "/order-items";
 
   constructor(private http: HttpClient) { }
 
-  getById(id: number): Observable<Order> {
-    return this.http.get<BaseResponse<Order>>(`${this.apiUrl}/${id}`).pipe(
+  create(input: OrderItemRequest): Observable<OrderItem> {
+    return this.http.post<BaseResponse<OrderItem>>(this.apiUrl, input).pipe(
       map(res => {
         if (res.status === 200 && res.payload) {
           return res.payload;
@@ -25,8 +25,8 @@ export class OrderService {
     );
   }
 
-  getAll(): Observable<Order[]> {
-    return this.http.get<BaseResponse<Order[]>>(this.apiUrl).pipe(
+  getById(id: number): Observable<OrderItem> {
+    return this.http.get<BaseResponse<OrderItem>>(`${this.apiUrl}/${id}`).pipe(
       map(res => {
         if (res.status === 200 && res.payload) {
           return res.payload;
@@ -37,8 +37,8 @@ export class OrderService {
     );
   }
 
-  getByUserId(userId: number): Observable<Order[]> {
-    return this.http.get<BaseResponse<Order[]>>(`${this.apiUrl}/by-user-id/${userId}`).pipe(
+  getAllByOrderId(orderId: number): Observable<OrderItem[]> {
+    return this.http.get<BaseResponse<OrderItem[]>>(`${this.apiUrl}/by-order-id/${orderId}`).pipe(
       map(res => {
         if (res.status === 200 && res.payload) {
           return res.payload;
@@ -49,8 +49,8 @@ export class OrderService {
     );
   }
 
-  update(id: number, order: OrderRequest): Observable<Order> {
-    return this.http.put<BaseResponse<Order>>(`${this.apiUrl}/${id}`, order).pipe(
+  update(id: number, input: OrderItemRequest): Observable<OrderItem> {
+    return this.http.put<BaseResponse<OrderItem>>(`${this.apiUrl}/${id}`, input).pipe(
       map(res => {
         if (res.status === 200 && res.payload) {
           return res.payload;
@@ -70,11 +70,11 @@ export class OrderService {
           throw new Error(res.exception?.message);
         }
       })
-    );
+    )
   }
 
-  confirmPayment(id: number): Observable<Order> {
-    return this.http.put<BaseResponse<Order>>(`${this.apiUrl}/${id}/confirm-payment`, null).pipe(
+  deliverOrderItem(id: number): Observable<OrderItem> {
+    return this.http.put<BaseResponse<OrderItem>>(`${this.apiUrl}/${id}/deliver`, null).pipe(
       map(res => {
         if (res.status === 200 && res.payload) {
           return res.payload;
@@ -85,8 +85,8 @@ export class OrderService {
     );
   }
 
-  cancel(id: number): Observable<Order> {
-    return this.http.put<BaseResponse<Order>>(`${this.apiUrl}/${id}/cancel`, null).pipe(
+  markOrderItemShipped(id: number): Observable<OrderItem> {
+    return this.http.put<BaseResponse<OrderItem>>(`${this.apiUrl}/${id}/ship`, null).pipe(
       map(res => {
         if (res.status === 200 && res.payload) {
           return res.payload;
@@ -97,8 +97,8 @@ export class OrderService {
     );
   }
 
-  getOrderStatus(id: number): Observable<string> {
-    return this.http.get<BaseResponse<string>>(`${this.apiUrl}/${id}/status`).pipe(
+  cancelOrderItem(id: number): Observable<OrderItem> {
+    return this.http.put<BaseResponse<OrderItem>>(`${this.apiUrl}/${id}/cancel`, null).pipe(
       map(res => {
         if (res.status === 200 && res.payload) {
           return res.payload;

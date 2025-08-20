@@ -5,7 +5,7 @@
   <p><strong>Address: </strong>{{ order.address.district }}, {{ order.address.city }}</p>
   <p *ngIf="addressDetail"><strong>Full Address: </strong>{{ order.address.fullAddress }}</p>
   <button class="btn btn-sm btn-outline-primary" (click)="toggleAddressDetailClick()">Address Details</button>
-  <button class="btn btn-sm btn-outline-primary ms-3" (click)="toggleAddressChange()">Change Address</button>
+  <button class="btn btn-sm btn-outline-primary ms-3" (click)="toggleAddressChange()" [disabled]="order.status !== 'PENDING' && order.status !== 'CONFIRMED'">Change Address</button>
 
 
   <div *ngIf="isAddressChanging" class="mt-2">
@@ -26,6 +26,9 @@
         <th>Quantity</th>
         <th>Price</th>
         <th>Subtotal</th>
+        <th>Status</th>
+        <th *ngIf="!(order.status === 'PENDIG' || order.status === 'CONFIRMED')">Review</th>
+        <th *ngIf="!(order.status === 'PENDIG' || order.status === 'CONFIRMED')">Refund</th>
       </tr>
     </thead>
     <tbody>
@@ -34,6 +37,39 @@
         <td>{{ item.quantity }}</td>
         <td>{{ item.price | currency:'TRY'}}</td>
         <td>{{ item.price * item.quantity | currency:'TRY' }}</td>
+        <td>{{ item.status }}</td>
+
+        <td *ngIf="!(order.status === 'PENDIG' || order.status === 'CONFIRMED')">
+          <ng-container *ngIf="item.status === 'DELIVERED'; else notDeliveredReview;">
+            <button
+            *ngIf="!hasReviewed(item.product.id)"
+            class="btn btn-sm btn-outline-success"
+            (click)="writeReview(item.product.id)">
+              Write Review
+            </button>
+            <span class="text-muted" *ngIf="hasReviewed(item.product.id)">Already Reviewed</span>
+          </ng-container>
+
+          <ng-template #notDeliveredReview>
+            <span class="text-secondary">Not Delivered Yet or Returned</span>
+          </ng-template>
+        </td>
+
+        <td *ngIf="!(order.status === 'PENDIG' || order.status === 'CONFIRMED')">
+          <ng-container *ngIf="item.status === 'DELIVERED'; else notDeliveredRefund;">
+            <button
+            *ngIf="!hasRefundRequested(item.id)"
+            class="btn btn-sm btn-outline-danger"
+            (click)="refundRequest(item)">
+              Request Refund
+            </button>
+            <span class="text-muted" *ngIf="hasRefundRequested(item.id)">Already Requested</span>
+          </ng-container>
+
+          <ng-template #notDeliveredRefund>
+            <span class="text-secondary">Not Delivered Yet or Returned</span>
+          </ng-template>
+        </td>
       </tr>
     </tbody>
   </table>

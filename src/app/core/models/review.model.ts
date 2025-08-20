@@ -6,12 +6,12 @@ export interface Review extends DtoBase {
   user: User;
   product: Product;
   content: string;
-  raiting: number;
+  rating: number;
 }
 
 export interface ReviewRequest {
   productId: number;
   userId?: number;
   content: string;
-  raiting: number;
+  rating: number;
 }

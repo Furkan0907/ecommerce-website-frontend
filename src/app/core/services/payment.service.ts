@@ -79,8 +79,8 @@ export class PaymentService {
     );
   }
 
-  refundPayment(orderId: number): Observable<Payment> {
-    return this.http.put<BaseResponse<Payment>>(`${this.apiUrl}/${orderId}/refund`, null).pipe(
+  refundPaymentItem(orderItemId: number): Observable<Payment> {
+    return this.http.put<BaseResponse<Payment>>(`${this.apiUrl}/${orderItemId}/refund`, null).pipe(
       map(res => {
         if (res.status === 200 && res.payload) {
           return res.payload;

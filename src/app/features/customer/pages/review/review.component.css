@@ -1,0 +1,12 @@
+.card img {
+  max-height: 150px;
+  object-fit: cover;
+}
+
+.card textarea {
+  resize: vertical;
+}
+
+.card select {
+  max-width: 120px;
+}

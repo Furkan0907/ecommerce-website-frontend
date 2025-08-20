@@ -23,6 +23,23 @@
         </ng-template>
 
         <p class="mt-3">{{ product.description }}</p>
+
+        <div class="d-flex align-items-center mt-3">
+          <a [routerLink]="['/seller', product.seller.id]" class="d-flex align-items-center text-decoration-none">
+            <img [src]="'https://ui-avatars.com/api/?name=' + product.seller.username + '&size=40&background=random&color=fff'"
+            alt="{{ product.seller.username }}"
+            class="rounded-circle me-2"
+            >
+            <span class="fw-bold">{{ product.seller.username }}</span>
+          </a>
+        </div>
+
+        <div class="mt-3" *ngIf="averageRatings[product.id] !== undefined">
+          <ng-container *ngFor="let star of [1,2,3,4,5]; let i = index">
+            <i class="fa" [ngClass]="i < averageRatings[product.id] ? 'fa-star text-warning' : 'fa-star-o text-muted'"></i>
+          </ng-container>
+          <span class="ms-2">{{ averageRatings[product.id] | number:'1.1-1' }}</span>
+        </div>
       </div>
 
       <div class="d-flex gap-2 mt-4">
@@ -42,4 +59,13 @@
       </div>
     </div>
   </div>
+
+  <hr class="my-4">
+
+  <h4>Reviews</h4>
+  <app-review-list [productId]="product.id" [pageSize]="5"></app-review-list>
+</div>
+
+<div *ngIf="loading">
+  <p>Loading product details...</p>
 </div>

@@ -14,6 +14,13 @@ import { MyOrdersComponent } from './pages/my-orders/my-orders.component';
 import { MyAddressesComponent } from './pages/my-addresses/my-addresses.component';
 import { AddressComponent } from './pages/address/address.component';
 import { PaymentComponent } from './pages/payment/payment.component';
+import { ReviewComponent } from './pages/review/review.component';
+import { ReviewListComponent } from './pages/review-list/review-list.component';
+import { MyReviewsComponent } from './pages/my-reviews/my-reviews.component';
+import { MyComplaintsComponent } from './pages/my-complaints/my-complaints.component';
+import { ContactComponent } from './pages/contact/contact.component';
+import { RefundRequestComponent } from './pages/refund-request/refund-request.component';
+import { MyRefundRequestsComponent } from './pages/my-refund-requests/my-refund-requests.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +33,14 @@ import { PaymentComponent } from './pages/payment/payment.component';
     MyOrdersComponent,
     MyAddressesComponent,
     AddressComponent,
-    PaymentComponent
+    PaymentComponent,
+    ReviewComponent,
+    ReviewListComponent,
+    MyReviewsComponent,
+    MyComplaintsComponent,
+    ContactComponent,
+    RefundRequestComponent,
+    MyRefundRequestsComponent
   ],
   imports: [
     CommonModule,

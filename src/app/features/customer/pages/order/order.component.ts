@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Order, OrderRequest } from '../../../../core/models/order.model';
-import { ActivatedRoute } from '@angular/router';
+import { Order, OrderItem, OrderRequest } from '../../../../core/models/order.model';
+import { ActivatedRoute, Router } from '@angular/router';
 import { OrderService } from '../../../../core/services/order.service';
 import { Address } from '../../../../core/models/address.model';
 import { AddressService } from '../../../../core/services/address.service';
@@ -9,6 +9,9 @@ import { PaymentService } from '../../../../core/services/payment.service';
 import { Payment, PaymentIU } from '../../../../core/models/payment.model';
 import { environment } from '../../../../../environments/environment';
 import { loadStripe } from '@stripe/stripe-js';
+import { ReviewService } from '../../../../core/services/review.service';
+import { RefundRequestService } from '../../../../core/services/refund-request.service';
+import { RefundRequest, RefundRequestRequest } from '../../../../core/models/refund-request.model';
 
 @Component({
   selector: 'app-order',
@@ -27,13 +30,18 @@ export class OrderComponent implements OnInit {
   selectedAddressId?: number;
   paymentLoading = false;
   payment?: Payment | null;
+  reviewedProducts: { [key: number]: boolean } = {};
+  refundRequests: RefundRequest[] = [];
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private orderService: OrderService,
     private addressService: AddressService,
     private authService: AuthService,
-    private paymentService: PaymentService
+    private paymentService: PaymentService,
+    private reviewService: ReviewService,
+    private refundRequestService: RefundRequestService
   ) { }
 
   ngOnInit(): void {
@@ -41,6 +49,7 @@ export class OrderComponent implements OnInit {
     if (id) {
       this.loadOrder(id);
       this.loadUserAddresses();
+      this.loadRefundRequests();
     }
   }
 
@@ -53,6 +62,17 @@ export class OrderComponent implements OnInit {
 
         if (this.order.status !== 'PENDING') {
           this.loadPayment(id);
+        }
+
+        if (this.order.status === 'DELIVERED') {
+          const userId = this.authService.getCurrentUser()?.id;
+          if (!userId) return;
+          this.order.orderItems.forEach((item: OrderItem) => {
+            this.reviewService.existsByUserIdAndProductId(userId, item.product.id)
+            .subscribe(exists => {
+              this.reviewedProducts[item.product.id] = exists;
+            });
+          });
         }
       },
       error: (err) => {
@@ -84,6 +104,17 @@ export class OrderComponent implements OnInit {
     this.addressService.getByUserId(userId).subscribe({
       next: (addresses) => this.addresses = addresses,
       error: (err) => console.error('Addresses could not be loaded', err)
+    });
+  }
+
+  loadRefundRequests() {
+    if (this.order?.status !== 'DELIVERED') return;
+
+    const userId = this.authService.getCurrentUser()?.id;
+    if (!userId) return;
+
+    this.refundRequestService.getAllByUserId(userId).subscribe(requests => {
+      this.refundRequests = requests;
     });
   }
 
@@ -152,5 +183,25 @@ export class OrderComponent implements OnInit {
       this.paymentLoading = false;
     }
   });
+  }
+
+  hasReviewed(productId: number) {
+    return this.reviewedProducts[productId] === true;
+  }
+
+  writeReview(productId: number) {
+    this.router.navigate(['/review', productId]);
+  }
+
+  onReviewCreated(item: OrderItem) {
+    this.reviewedProducts[item.product.id] = true;
+  }
+
+  refundRequest(item: OrderItem) {
+    this.router.navigate(['/refund-request', item.id]);
+  }
+
+  hasRefundRequested(orderItemId: number): boolean {
+    return this.refundRequests.some(r => r.orderItem.id === orderItemId);
   }
 }

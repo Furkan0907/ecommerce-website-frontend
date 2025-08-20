@@ -5,6 +5,7 @@ import { ProductService } from '../../../../core/services/product.service';
 import { CartService } from '../../../../core/services/cart.service';
 import { AuthService } from '../../../../authentication/service/auth.service';
 import { ToastrService } from 'ngx-toastr';
+import { ReviewService } from '../../../../core/services/review.service';
 
 @Component({
   selector: 'app-product-detail',
@@ -16,6 +17,7 @@ export class ProductDetailComponent implements OnInit {
   product!: Product;
   loading = true;
   errorMessage: string | null = null;
+  averageRatings: { [productId: number]: number } = {};
 
   constructor(
     private route: ActivatedRoute,
@@ -23,7 +25,8 @@ export class ProductDetailComponent implements OnInit {
     private cartService: CartService,
     private authService: AuthService,
     private router: Router,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private reviewService: ReviewService
   ) { }
 
   ngOnInit(): void {
@@ -32,6 +35,10 @@ export class ProductDetailComponent implements OnInit {
       this.productSerive.getProductById(id).subscribe({
         next: (data) => {
           this.product = data;
+          this.reviewService.getAverageRatingForProduct(this.product.id).subscribe({
+            next: (avg) => this.averageRatings[this.product.id] = avg,
+            error: () => this.averageRatings[this.product.id] = 0
+          });
           this.loading = false;
         },
         error: (err) => {

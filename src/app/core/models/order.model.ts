@@ -20,6 +20,7 @@ export interface OrderItem extends DtoBase {
   product: Product;
   quantity: number;
   price: number;
+  status: string;
 }
 
 export interface OrderItemRequest {

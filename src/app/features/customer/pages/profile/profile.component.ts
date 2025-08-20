@@ -124,4 +124,16 @@ export class ProfileComponent implements OnInit {
   myAddresses() {
     this.router.navigate(['profile/my-addresses']);
   }
+
+  myReviews() {
+    this.router.navigate(['/profile/my-reviews']);
+  }
+
+  myComplaints() {
+    this.router.navigate(['/profile/my-complaints']);
+  }
+
+  myRefundRequests() {
+    this.router.navigate(['/profile/my-refund-requests']);
+  }
 }

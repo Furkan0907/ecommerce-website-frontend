@@ -17,7 +17,19 @@
         </button>
 
         <div class="card-body">
-          <h5 class="card-title">{{ product.brand }} - {{ product.name }}</h5>
+          <h5 class="card-title">{{ product.brand }} - {{ product.name }}
+          </h5>
+
+          <div class="mb-2">
+            <ng-container *ngFor="let star of [1,2,3,4,5]; let i = index">
+              <i class="fa" [ngClass]="i < averageRatings[product.id] ? 'fa-star text-warning' : 'fa-star-o text-muted'"></i>
+            </ng-container>
+            <span *ngIf="averageRatings[product.id] > 1; else NoRating;" class="ms-1">{{ averageRatings[product.id] | number:'1.1-1' }}</span>
+            <ng-template #NoRating>
+              <span>No rating yet.</span>
+            </ng-template>
+          </div>
+
           <p class="card-text fw-bold">{{ product.price | currency:'TL'}}</p>
         </div>
       </div>

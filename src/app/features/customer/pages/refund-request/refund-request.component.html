@@ -1,0 +1,42 @@
+<div *ngIf="orderItem" class="card mb-3" style="max-width: 600px; margin: auto;">
+  <div class="row g-0 align-items-center">
+
+    <div class="col-md-4 text-center p-2">
+      <img [src]="'assets/images/' + orderItem.product.imageUrl" class="img-fluid rounded" alt="{{ orderItem.product.name }}">
+    </div>
+
+
+    <div class="col-md-8">
+      <div class="card-body">
+        <h5 class="card-title">Request Refund for {{ orderItem.product.name }}</h5>
+
+        <div *ngIf="successMessage" class="alert alert-success">{{ successMessage }}</div>
+        <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
+
+        <form [formGroup]="refundForm" (ngSubmit)="submitRefund()">
+          <div class="mb-3">
+            <label for="reason" class="form-label">Reason</label>
+            <textarea id="reason" formControlName="reason" class="form-control" rows="3"
+              [class.is-invalid]="refundForm.get('reason')?.invalid && refundForm.get('reason')?.touched">
+            </textarea>
+            <div class="invalid-feedback" *ngIf="refundForm.get('reason')?.invalid && refundForm.get('reason')?.touched">
+              Reason is required and must be at least 10 characters.
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-danger" [disabled]="submitting || refundForm.invalid">
+            {{ submitting ? 'Submitting...' : 'Submit Refund Request' }}
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="!orderItem && !errorMessage">
+  <p>Loading order item...</p>
+</div>
+
+<div *ngIf="errorMessage && !orderItem" class="alert alert-danger">
+  {{ errorMessage }}
+</div>

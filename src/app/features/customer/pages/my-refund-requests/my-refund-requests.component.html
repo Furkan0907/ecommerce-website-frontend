@@ -1,0 +1,40 @@
+<div class="container mt-4">
+  <h2>My Refund Requests</h2>
+
+  <div *ngIf="loading">
+    <p>Loading refund requests...</p>
+  </div>
+
+  <div *ngIf="error" class="text-danger">
+    {{ error }}
+  </div>
+
+  <table *ngIf="!loading && refundRequests.length > 0" class="table table-striped mt-3">
+    <thead>
+      <tr>
+        <th>Order ID</th>
+        <th>Product</th>
+        <th>Reason</th>
+        <th>Status</th>
+        <th>Requested At</th>
+      </tr>
+    </thead>
+    <tbody>
+  <tr *ngFor="let req of refundRequests">
+    <td>{{ req.order.id }}</td>
+    <td>{{ req.orderItem.product.name }}</td>
+    <td>{{ req.reason }}</td>
+    <td>{{ req.status }}</td>
+    <td>{{ req.createAt | date:'short' }}</td>
+    <td>
+      <button *ngIf="req.status === 'PENDING'" class="btn btn-sm btn-warning"
+              (click)="cancelRequest(req)">Cancel</button>
+    </td>
+  </tr>
+</tbody>
+  </table>
+
+  <div *ngIf="!loading && refundRequests.length === 0">
+    <p>No refund requests found.</p>
+  </div>
+</div>

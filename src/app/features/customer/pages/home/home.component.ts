@@ -5,6 +5,8 @@ import { Router } from '@angular/router';
 import { CartService } from '../../../../core/services/cart.service';
 import { AuthService } from '../../../../authentication/service/auth.service';
 import { ToastrService } from 'ngx-toastr';
+import { ReviewService } from '../../../../core/services/review.service';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -16,13 +18,15 @@ export class HomeComponent implements OnInit {
   products: Product[] = [];
   loading: boolean = false;
   errorMessage: string | null = null;
+  averageRatings: { [productId: number]: number } = {};
 
   constructor(
     private productService: ProductService,
     private cartService: CartService,
     private authService: AuthService,
     private router: Router,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private reviewService: ReviewService
   ) { }
 
   ngOnInit(): void {
@@ -36,6 +40,17 @@ export class HomeComponent implements OnInit {
     this.productService.getAllProducts().subscribe({
       next: (data) => {
         this.products = data;
+
+        const ratingCalls = this.products.map(p => this.reviewService.      getAverageRatingForProduct(p.id));
+        forkJoin(ratingCalls).subscribe({
+          next: (ratings) => {
+            this.products.forEach((p, i) => this.averageRatings[p.id] = ratings[i]);
+          },
+          error: () => {
+            this.products.forEach(p => this.averageRatings[p.id] = 0);
+          }
+        });
+
         this.loading = false;
       },
       error: (err) => {

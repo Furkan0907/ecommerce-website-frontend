@@ -10,3 +10,7 @@
   justify-content: space-between;
   height: 150px;
 }
+
+.card-body .fa {
+  font-size: 0.9rem;
+}

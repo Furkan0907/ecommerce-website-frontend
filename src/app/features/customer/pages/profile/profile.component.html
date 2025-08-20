@@ -8,9 +8,15 @@
     <p><strong>Role: </strong>{{ currentUser.role }}</p>
     <button class="btn btn-primary" (click)="enableEdit()">Edit</button>
 
-    <button class="btn btn-warning mx-3" (click)="myOrders()">My Orders</button>
+    <button class="btn btn-warning mx-3 text-white" (click)="myOrders()">My Orders</button>
 
     <button class="btn btn-success" (click)="myAddresses()">My Addresses</button>
+
+    <button class="btn btn-secondary ms-3" (click)="myReviews()">My Reviews</button>
+
+    <button class="btn btn-danger ms-3" (click)="myComplaints()">My Complaints</button>
+
+    <button class="btn btn-info ms-3 text-white" (click)="myRefundRequests()">My Refund Requests</button>
   </div>
 
   <ng-template #editForm>

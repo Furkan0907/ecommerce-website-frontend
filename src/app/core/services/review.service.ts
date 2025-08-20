@@ -90,7 +90,7 @@ export class ReviewService {
     .set('pageNumber', pageable.pageNumber)
     .set('pageSize', pageable.pageSize);
 
-    if (pageable.asc !== null) {
+    if (pageable.asc !== null && pageable.asc !== undefined) {
       params = params.set('asc', String(pageable.asc));
     }
     if (pageable.columnName !== undefined) {

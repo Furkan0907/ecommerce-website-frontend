@@ -1,4 +1,5 @@
 import { DtoBase } from "./dto-base.model";
+import { User } from "./user.model";
 
 
 export interface Product extends DtoBase {
@@ -9,6 +10,7 @@ export interface Product extends DtoBase {
   category: string;
   brand: string;
   imageUrl?: string;
+  seller: User;
 }
 
 export interface ProductRequest {
@@ -19,4 +21,5 @@ export interface ProductRequest {
   category: string;
   brand: string;
   imageUrl?: string;
+  sellerId: number;
 }

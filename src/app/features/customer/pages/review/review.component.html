@@ -1,0 +1,30 @@
+<div class="card mb-4 p-3" style="max-width: 700px; margin: auto;">
+  <div class="row g-3 align-items-center">
+
+    <div class="col-md-4 text-center">
+      <img [src]="'assets/images/' + product?.imageUrl" class="img-fluid rounded" alt="{{ product?.name }}">
+      <p class="mt-2 text-center">{{ product?.name }}</p>
+    </div>
+
+    <div class="col-md-8">
+      <form [formGroup]="reviewForm" (ngSubmit)="submit()">
+
+        <div class="mb-3 d-flex align-items-center">
+          <label for="rating" class="me-2 mb-0"><strong>Rating:</strong></label>
+          <select formControlName="rating" id="rating" class="form-select w-auto">
+            <option *ngFor="let r of [1,2,3,4,5]" [value]="r">{{ r }} ⭐</option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label for="content" class="form-label"><strong>Comment:</strong></label>
+          <textarea formControlName="content" id="content" class="form-control" rows="4" placeholder="Write your review here..."></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100" [disabled]="!reviewForm.valid">
+          Submit Review
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,31 @@
+<div *ngFor="let review of reviews" class="card p-3 mb-3">
+  <div class="d-flex align-items-center mb-2">
+    <img [src]="'/assets/images/' + review.product.imageUrl" alt="{{ review.product.name }}" class="rounded" style="width: 80px; height: 80px; object-fit: contain;">
+    <div class="ms-3">
+      <h5 class="mb-0">{{ review.product.name }}</h5>
+      <div>
+        <ng-container *ngFor="let star of [1,2,3,4,5]; let i = index">
+          <i class="fa" [ngClass]="i < review.rating ? 'fa-star text-warning' : 'fa-star-o text-muted'"></i>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+
+  <p *ngIf="editingReviewId !== review.id">{{ review.content }}</p>
+
+  <div *ngIf="editingReviewId === review.id">
+    <form [formGroup]="reviewForm" (ngSubmit)="submitEdit()">
+      <select formControlName="rating" class="form-select w-auto mb-2">
+        <option *ngFor="let r of [1,2,3,4,5]" [value]="r">{{ r }} ⭐</option>
+      </select>
+      <textarea formControlName="content" class="form-control mb-2" rows="3"></textarea>
+      <button type="submit" class="btn btn-primary btn-sm me-2" [disabled]="!reviewForm.valid">Save</button>
+      <button type="button" class="btn btn-secondary btn-sm" (click)="cancelEdit()">Cancel</button>
+    </form>
+  </div>
+
+  <div *ngIf="editingReviewId !== review.id" class="mt-2">
+    <button class="btn btn-sm btn-outline-primary me-2" (click)="editReview(review)">Edit</button>
+    <button class="btn btn-sm btn-outline-danger" (click)="deleteReview(review.id)">Delete</button>
+  </div>
+</div>

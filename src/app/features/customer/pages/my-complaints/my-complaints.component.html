@@ -1,0 +1,76 @@
+<div class="container mt-4">
+  <h2>My Complaints</h2>
+
+  <div *ngIf="errorMessage" class="alert alert-danger">
+    {{ errorMessage }}
+  </div>
+
+  <button class="btn btn-outline-primary btn-lg mt-4" (click)="toggleAdding()">Add Complaint</button>
+
+  <div class="card mb-4 mt-2" *ngIf="isAddingForm">
+    <div class="card-body">
+      <form [formGroup]="complaintForm" (ngSubmit)="submitComplaint()">
+        <div class="mb-3">
+          <label for="subject" class="form-label">Subject</label>
+          <input id="subject" type="text" class="form-control"
+                 formControlName="subject" placeholder="Enter subject" />
+          <div *ngIf="complaintForm.get('subject')?.invalid && complaintForm.get('subject')?.touched"
+               class="text-danger small">
+            Subject is required.
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="description" class="form-label">Description</label>
+          <textarea id="description" class="form-control" rows="3"
+                    formControlName="description" placeholder="Describe your complaint"></textarea>
+          <div *ngIf="complaintForm.get('description')?.invalid && complaintForm.get('description')?.touched"
+               class="text-danger small">
+            Description is required.
+          </div>
+        </div>
+
+        <button class="btn btn-primary" type="submit" [disabled]="complaintForm.invalid">
+          Submit
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <div *ngIf="loading" class="text-center">
+    <div class="spinner-border" role="status"></div>
+  </div>
+
+  <table *ngIf="!loading && complaints.length > 0" class="table table-striped">
+    <thead>
+      <tr>
+        <th>Subject</th>
+        <th>Description</th>
+        <th>Status</th>
+        <th style="width: 100px">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let complaint of complaints">
+        <td>{{ complaint.subject }}</td>
+        <td>{{ complaint.description }}</td>
+        <td>
+          <span class="badge"
+                [ngClass]="complaint.resolved ? 'bg-success' : 'bg-warning text-dark'">
+            {{ complaint.resolved ? 'Resolved' : 'Pending' }}
+          </span>
+        </td>
+        <td>
+          <button class="btn btn-sm btn-danger"
+                  (click)="deleteComplaint(complaint.id)">
+            Delete
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="!loading && complaints.length === 0" class="alert alert-info">
+    You have not submitted any complaints yet.
+  </div>
+</div>
