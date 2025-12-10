@@ -21,6 +21,7 @@ import { MyComplaintsComponent } from './pages/my-complaints/my-complaints.compo
 import { ContactComponent } from './pages/contact/contact.component';
 import { RefundRequestComponent } from './pages/refund-request/refund-request.component';
 import { MyRefundRequestsComponent } from './pages/my-refund-requests/my-refund-requests.component';
+import { SellerDetailComponent } from './pages/seller-detail/seller-detail.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { MyRefundRequestsComponent } from './pages/my-refund-requests/my-refund-
     MyComplaintsComponent,
     ContactComponent,
     RefundRequestComponent,
-    MyRefundRequestsComponent
+    MyRefundRequestsComponent,
+    SellerDetailComponent
   ],
   imports: [
     CommonModule,

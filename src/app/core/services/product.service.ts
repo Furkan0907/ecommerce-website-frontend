@@ -5,6 +5,7 @@ import { HttpClient, HttpParams } from "@angular/common/http";
 import { map, min, Observable } from "rxjs";
 import {  Product, ProductRequest } from "../models/product.model";
 import { Pageable, PageableRequest } from '../models/pageable.model';
+import { User } from '../models/user.model';
 
 @Injectable({
   providedIn: 'root'
@@ -244,6 +245,18 @@ export class ProductService {
           return res.payload;
         } else {
           throw new Error(res.exception?.message);
+        }
+      })
+    );
+  }
+
+  getSellerByProductId(productId: number): Observable<User> {
+    return this.http.get<BaseResponse<User>>(`${this.apiUrl}/${productId}/seller`).pipe(
+      map(response => {
+        if (response.status === 200 && response.payload) {
+          return response.payload;
+        } else {
+          throw new Error(response.exception?.message || 'Kullanıcı bulunamadı');
         }
       })
     );

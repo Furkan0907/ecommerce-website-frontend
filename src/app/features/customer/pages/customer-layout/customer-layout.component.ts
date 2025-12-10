@@ -38,7 +38,11 @@ export class CustomerLayoutComponent implements OnInit {
   }
 
   getCurrentUsername(): string | null {
-    return this.authService.getCurrentUser()?.username || null;
+    if (this.isLoggedIn()) {
+      return this.authService.getCurrentUser()?.username || null;
+    } else {
+      return 'Guest | Please login';
+    }
   }
 
   hasOrderPending(): void {
@@ -74,5 +78,10 @@ export class CustomerLayoutComponent implements OnInit {
     } else {
       this.router.navigate(['/']);
     }
+  }
+
+  isLoggedIn() {
+    if (!this.authService.hasValidToken()) return false;
+    return true;
   }
 }

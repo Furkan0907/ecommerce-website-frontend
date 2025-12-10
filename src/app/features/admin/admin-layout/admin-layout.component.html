@@ -1,1 +1,35 @@
-<p>admin-layout works!</p>
+<div class="d-flex" id="admin-wrapper">
+
+    <app-admin-sidebar></app-admin-sidebar>
+
+    <div id="page-content-wrapper" class="flex-grow-1">
+
+        <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom p-3">
+            <div class="container-fluid">
+                <a class="navbar-brand fw-bold text-primary" href="/admin">ADMIN PANEL</a>
+
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav ms-auto mt-2 mt-lg-0 align-items-center">
+
+                        <li class="nav-item me-3">
+                            <span class="fw-bold text-secondary">{{ getCurrentUsername() }}</span>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="btn btn-outline-danger" (click)="logout()" style="cursor:pointer" title="Çıkış Yap">
+                                <i class="bi bi-box-arrow-right me-1"></i> Logout
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container-fluid p-3">
+
+            <button class="btn btn-primary mb-3" *ngIf="showBackButton" (click)="goBack()">← Back</button>
+
+            <router-outlet></router-outlet>
+        </div>
+    </div>
+</div>

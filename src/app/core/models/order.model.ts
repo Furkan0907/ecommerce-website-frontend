@@ -2,9 +2,11 @@ import { Address } from "./address.model";
 import { DtoBase } from "./dto-base.model";
 import { Payment } from "./payment.model";
 import { Product } from "./product.model";
+import { User } from "./user.model";
 
 
 export interface Order extends DtoBase {
+  user?: User
   address: Address;
   orderItems: OrderItem[];
   totalAmount: number;
@@ -13,6 +15,7 @@ export interface Order extends DtoBase {
 }
 
 export interface OrderRequest {
+  userId?: number;
   addressId: number;
 }
 
@@ -21,6 +24,7 @@ export interface OrderItem extends DtoBase {
   quantity: number;
   price: number;
   status: string;
+  orderId: number;
 }
 
 export interface OrderItemRequest {

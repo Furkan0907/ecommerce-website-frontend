@@ -1,0 +1,93 @@
+<div class="container py-4">
+    <h2 class="mb-4">📋 Order Details #{{ orderId }}</h2>
+
+    <div *ngIf="loading" class="text-center p-5">
+        <div class="spinner-border text-primary" role="status"></div>
+        <p class="mt-2 text-muted">Loading Order Details...</p>
+    </div>
+
+    <div *ngIf="loading && order" class="alert alert-danger">{{ error }}</div>
+
+    <div *ngIf="order && !loading && !error" class="row">
+        <div class="col-lg-8">
+
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">General Situation and Dates</h5>
+                </div>
+                <div class="card-body">
+                    <p><strong>Date of Order:</strong> {{ order.createdAt | date: 'medium' }}</p>
+                    <p class="mb-0">
+                        <strong>Current Situation:</strong>
+                        <span class="badge fs-6 ms-2" [ngClass]="getStatusBadgeClass(order.status)">{{ order.status }}</span>
+                    </p>
+                </div>
+            </div>
+
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">Ordered Products ({{ order.orderItems.length }} Piece)</h5>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li *ngFor="let item of order.orderItems" class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <span class="fw-bold">{{ item.product.name }}</span>
+                            <small class="text-muted d-block">{{ item.quantity }} x ₺{{ item.price | number: '1.2-2' }}</small>
+                        </div>
+                         <span class="badge" [ngClass]="getStatusBadgeClass(item.status)">{{ item.status }}</span>
+                        <span class="fw-bold text-success">₺{{ (item.quantity * item.price) | number: '1.2-2' }}</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">Delivery Address</h5>
+                </div>
+                <div class="card-body">
+                    <p class="fw-bold">{{ order.address.phoneNumber }}</p>
+                    <p class="mb-0">{{ order.address.fullAddress }}</p>
+                    <p class="mb-0">{{ order.address.district }} / {{ order.address.city }}</p>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-lg-4">
+
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Payment Summary</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item d-flex justify-content-between">
+                            Total Amount:
+                            <span class="fw-bold fs-5 text-success">₺{{ order.totalAmount | number: '1.2-2' }}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between">
+                            Payment Method:
+                            <span class="fw-bold">{{ order.payment.method || 'Unknown' }}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between">
+                            Payment Status:
+                            <span class="fw-bold">{{ order.payment.status || 'Unknown' }}</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card shadow-sm">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">Customer Information</h5>
+                </div>
+                <div class="card-body">
+                    <p><strong>Username:</strong> {{ order.user?.username }}</p>
+                    <p class="mb-0"><strong>Email:</strong> {{ order.user?.email }}</p>
+                    <p class="mb-0"><strong>Role:</strong>{{ order.user?.role }}</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

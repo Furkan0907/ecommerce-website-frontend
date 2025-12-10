@@ -25,7 +25,7 @@
     <td>{{ req.orderItem.product.name }}</td>
     <td>{{ req.reason }}</td>
     <td>{{ req.status }}</td>
-    <td>{{ req.createAt | date:'short' }}</td>
+    <td>{{ req.createdAt | date:'short' }}</td>
     <td>
       <button *ngIf="req.status === 'PENDING'" class="btn btn-sm btn-warning"
               (click)="cancelRequest(req)">Cancel</button>

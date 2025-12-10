@@ -96,4 +96,28 @@ export class RefundRequestService {
       })
     );
   }
+
+  getRefundRequestForSeller(refundRequestId: number): Observable<RefundRequest> {
+    return this.http.get<BaseResponse<RefundRequest>>(`${this.apiUrl}/seller/${refundRequestId}`).pipe(
+      map(res => {
+        if (res.status === 200 && res.payload) {
+          return res.payload;
+        } else {
+          throw new Error(res.exception?.message);
+        }
+      })
+    );
+  }
+
+  getAllRefundRequestsBySellerId(): Observable<RefundRequest[]> {
+    return this.http.get<BaseResponse<RefundRequest[]>>(`${this.apiUrl}/seller`).pipe(
+      map(res => {
+        if (res.status === 200 && res.payload) {
+          return res.payload;
+        } else {
+          throw new Error(res.exception?.message)
+        }
+      })
+    );
+  }
 }

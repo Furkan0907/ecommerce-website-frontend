@@ -1,0 +1,26 @@
+<div *ngIf="seller">
+  <div class="d-flex align-items-center mb-3">
+    <img [src]="'https://ui-avatars.com/api/?name=' + seller.username + '&size=80&background=random&color=fff'"
+         class="rounded-circle me-3">
+
+    <div>
+      <h3>{{ seller.username }}</h3>
+      <p>{{ seller.role }} / {{ seller.email }}</p>
+      <p>Has been around since {{ seller.createdAt }}</p>
+    </div>
+  </div>
+
+  <h4>Products</h4>
+  <div class="row">
+    <div class="col-md-4 mb-3" *ngFor="let product of products">
+      <div class="card h-100">
+        <img [src]="product.imageUrl" class="card-img-top" alt="{{ product.name }}">
+        <div class="card-body">
+          <h5 class="card-title">{{ product.name }}</h5>
+          <p class="card-text">{{ product.price | currency:'TRY' }}</p>
+          <a [routerLink]="['/product', product.id]" class="btn btn-primary">Details</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

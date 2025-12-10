@@ -1,0 +1,35 @@
+<div class="container mt-4">
+
+  <div class="row mb-4">
+    <div class="col-md-4">
+      <div class="card text-white bg-primary">
+        <div class="card-body text-center">
+          <h5 class="card-title">Total Product</h5>
+          <p class="card-text display-4">{{ productCount }}</p>
+          <button class="btn btn-success" (click)="goProducts()">Go Product List</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card text-white bg-info">
+        <div class="card-body text-center">
+          <h5 class="card-title">Total Orders</h5>
+          <p class="card-text display-4">{{ orderCount }}</p>
+          <button class="btn btn-success" (click)="goOrders()">Go Order List</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card text-white bg-warning">
+        <div class="card-body text-center">
+          <h5 class="card-title">Total Refund Requests</h5>
+          <p class="card-text display-4">{{ refundRequestCount }}</p>
+          <button class="btn btn-success" (click)="goRefundRequests()">Go Refund Requests</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

@@ -8,7 +8,23 @@ const routes: Routes = [
     path: '',
     component: AdminLayoutComponent,
     children: [
-      { path: '', component: AdminDashboardComponent }
+      { path: '', component: AdminDashboardComponent },
+
+      {
+        path: 'orders',
+        loadChildren: () =>
+          import('../admin/order-management/order-management.module').then(
+            (m) => m.OrderManagementModule
+          ),
+      },
+
+      {
+        path: 'products',
+        loadChildren: () =>
+          import('../admin/product-management/product-management.module').then(
+            (m) => m.ProductManagementModule
+          ),
+      },
     ]
   }
 ];

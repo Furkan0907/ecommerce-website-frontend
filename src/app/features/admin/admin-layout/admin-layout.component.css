@@ -1,0 +1,16 @@
+#admin-wrapper {
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+app-admin-sidebar {
+  width: 250px;
+  background-color: #343a40;
+  color: white;
+  flex-shrink: 0;
+}
+
+#page-content-wrapper {
+  min-width: 0;
+  width: 100%;
+}

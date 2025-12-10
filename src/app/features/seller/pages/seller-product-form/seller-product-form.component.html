@@ -1,0 +1,59 @@
+<div class="card p-4">
+  <h5 class="card-title mb-3">{{ product ? 'Edit Product' : 'Add New Product' }}</h5>
+  <form [formGroup]="form" (ngSubmit)="save()">
+
+    <div class="mb-3">
+      <label for="name" class="form-label">Product Name</label>
+      <input type="text" id="name" class="form-control" formControlName="name">
+      <div *ngIf="form.get('name')?.invalid && form.get('name')?.touched" class="text-danger">
+        Name is required
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label for="description" class="form-label">Description</label>
+      <textarea id="description" class="form-control" formControlName="description" rows="3"></textarea>
+    </div>
+
+    <div class="mb-3 row">
+      <div class="col">
+        <label for="price" class="form-label">Price</label>
+        <input type="number" id="price" class="form-control" formControlName="price">
+        <div *ngIf="form.get('price')?.invalid && form.get('price')?.touched" class="text-danger">
+          Price is required
+        </div>
+      </div>
+      <div class="col">
+        <label for="stockQuantity" class="form-label">Stock Quantity</label>
+        <input type="number" id="stockQuantity" class="form-control" formControlName="stockQuantity">
+        <div *ngIf="form.get('stockQuantity')?.invalid && form.get('stockQuantity')?.touched" class="text-danger">
+          Stock quantity is required
+        </div>
+      </div>
+    </div>
+
+    <div class="mb-3 row">
+      <div class="col">
+        <label for="category" class="form-label">Category</label>
+        <input type="text" id="category" class="form-control" formControlName="category">
+      </div>
+      <div class="col">
+        <label for="brand" class="form-label">Brand</label>
+        <input type="text" id="brand" class="form-control" formControlName="brand">
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label for="imageUrl" class="form-label">Image URL</label>
+      <input type="text" id="imageUrl" class="form-control" formControlName="imageUrl">
+    </div>
+
+    <div class="d-flex justify-content-end mt-4">
+      <button type="button" class="btn btn-secondary me-2" (click)="cancel()">Cancel</button>
+      <button type="submit" class="btn btn-primary" [disabled]="form.invalid">
+        {{ product ? 'Update Product' : 'Add Product' }}
+      </button>
+    </div>
+
+  </form>
+</div>

@@ -1,0 +1,56 @@
+<div class="d-flex" style="height: 100vh;">
+
+  <div class="sidebar bg-dark text-white p-3"
+     [class.collapsed]="isCollapsed"
+     (mouseenter)="expand()"
+     (mouseleave)="collapse()">
+    <h4 class="mb-4 sidebar-title">Seller Panel</h4>
+    <ul class="nav flex-column">
+      <li class="nav-item mb-2">
+        <a class="nav-link text-white" routerLink="dashboard" routerLinkActive="active">
+          <i class="bi bi-speedometer2"></i>
+          <span class="link-text">Dashboard</span>
+        </a>
+      </li>
+      <li class="nav-item mb-2">
+        <a class="nav-link text-white" routerLink="products" routerLinkActive="active">
+          <i class="bi bi-box"></i>
+          <span class="link-text">Products</span>
+        </a>
+      </li>
+      <li class="nav-item mb-2">
+        <a class="nav-link text-white" routerLink="orders" routerLinkActive="active">
+          <i class="bi bi-basket"></i>
+          <span class="link-text">Orders</span>
+        </a>
+      </li>
+      <li class="nav-item mb-2">
+        <a class="nav-link text-white" routerLink="refund-requests" routerLinkActive="active">
+          <i class="bi bi-arrow-counterclockwise"></i>
+          <span class="link-text">Refund Requests</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <div class="flex-grow-1 d-flex flex-column">
+
+    <nav class="navbar navbar-light bg-light px-4">
+      <span class="navbar-brand mb-0 h1">Seller Dashboard</span>
+      <div>
+        <span class="me-3 fw-bold">{{ sellerName }}</span>
+        <a class="text-white border border-danger py-1 px-3 rounded bg-danger me-3"
+        style="cursor:pointer"
+        title="Logout"
+        (click)="logout()">
+          <i class="bi bi-box-arrow-right" style="font-size: 1.3rem;"></i>
+        </a>
+      </div>
+    </nav>
+
+
+    <main class="p-4 bg-light flex-grow-1 overflow-auto">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>

@@ -16,7 +16,7 @@
         <td>{{ order.id }}</td>
         <td>{{ order.status }}</td>
         <td>{{ order.totalAmount | currency:'TRY' }}</td>
-        <td>{{ order.createAt | date:'short' }}</td>
+        <td>{{ order.createdAt | date:'short' }}</td>
         <td>
           <a [routerLink]="['/order', order.id]" class="btn btn-sm btn-info">
             View

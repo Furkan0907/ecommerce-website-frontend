@@ -1,0 +1,28 @@
+.sidebar {
+  width: 60px;
+  transition: width 0.3s;
+  overflow: hidden;
+  min-height: 100vh;
+}
+
+.sidebar.collapsed {
+  width: 60px;
+}
+
+.sidebar:not(.collapsed) {
+  width: 250px;
+}
+
+.sidebar.collapsed .sidebar-title {
+  opacity: 0;
+}
+
+.sidebar .link-text {
+  margin-left: 0.5rem;
+  white-space: nowrap;
+  transition: opacity 0.3s;
+}
+
+.sidebar.collapsed .link-text {
+  opacity: 0;
+}

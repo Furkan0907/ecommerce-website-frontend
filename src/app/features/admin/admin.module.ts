@@ -6,12 +6,14 @@ import { RouterModule } from "@angular/router";
 import { SellerRotuingModule } from "../seller/seller-routing.module";
 import { AdminRouterModule } from "./admin-routing.module";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { AdminSidebarComponent } from './admin-sidebar/admin-sidebar.component';
 
 
 @NgModule({
   declarations: [
     AdminLayoutComponent,
-    AdminDashboardComponent
+    AdminDashboardComponent,
+    AdminSidebarComponent
   ],
   imports: [
     CommonModule,
