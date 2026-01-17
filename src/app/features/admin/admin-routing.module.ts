@@ -25,6 +25,16 @@ const routes: Routes = [
             (m) => m.ProductManagementModule
           ),
       },
+
+      {
+        path: 'users',
+        loadChildren: () =>
+          import('../admin/user-management/user-management.module').then(
+            (m) => m.UserManagementModule
+          ),
+      },
+
+      { path: '**', redirectTo: '', pathMatch: 'full' },
     ]
   }
 ];

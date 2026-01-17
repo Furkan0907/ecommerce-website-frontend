@@ -1,0 +1,72 @@
+<div class="container">
+  <h2>User Management</h2>
+
+  <div class="filter-bar">
+    <input
+      type="text"
+      [(ngModel)]="searchTerm"
+      (input)="applyFilters()"
+      placeholder="Search by username or email..."
+      class="search-input">
+
+    <select [(ngModel)]="selectedRole" (change)="applyFilters()" class="role-filter">
+      <option value="ALL">All Roles</option>
+      <option value="CUSTOMER">CUSTOMER</option>
+      <option value="SELLER">SELLER</option>
+      <option value="ADMIN">ADMIN</option>
+    </select>
+  </div>
+
+  <div *ngIf="isLoading" class="info-msg">Loading data...</div>
+  <div *ngIf="error" class="error-msg">{{ error }}</div>
+
+  <table *ngIf="!isLoading">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Username</th>
+        <th>Email</th>
+        <th>Role</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of filteredUsers">
+        <td>{{ user.id }}</td>
+        <td>{{ user.username }}</td>
+        <td>{{ user.email }}</td>
+        <td>{{ user.role }}</td>
+        <td>
+          <span [class.banned]="user.isBanned === 'true'">
+            {{ user.isBanned === 'true' ? 'Banned' : 'Active' }}
+          </span>
+        </td>
+        <td>
+          <button
+          class="btn-edit"
+          (click)="editUser(user.id)">
+          Edit
+          </button>
+
+          <button
+            class="btn-delete"
+            (click)="deleteUser(user.id)"
+            [disabled]="isUserAdmin(user.id)">
+            Delete
+          </button>
+
+          <button
+            class="btn-ban"
+            (click)="setBanStatus(user, user.isBanned !== 'true')">
+            {{ user.isBanned === 'true' ? 'Unban' : 'Ban' }}
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="filteredUsers.length === 0 && !isLoading" class="info-msg">
+    No users found matching your criteria.
+  </div>
+</div>
