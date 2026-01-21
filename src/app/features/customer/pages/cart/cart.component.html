@@ -46,9 +46,9 @@
     <hr>
 
     <div class="d-flex justify-content-between align-items-center">
-      <h4>Toplam: {{ getTotalPrice() | currency:'TRY' }}</h4>
-      <button class="btn btn-danger" (click)="clearCart()">Sepeti Boşalt</button>
-      <button class="btn btn-success" (click)="checkout()">Satın Al</button>
+      <h4>Total Cost: {{ getTotalPrice() | currency:'TRY' }}</h4>
+      <button class="btn btn-danger" (click)="clearCart()">Empty the Cart</button>
+      <button class="btn btn-success" (click)="checkout()">Confirm the Cart</button>
     </div>
   </div>
 </div>

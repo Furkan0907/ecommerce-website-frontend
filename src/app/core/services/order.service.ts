@@ -144,4 +144,8 @@ export class OrderService {
       })
     );
   }
+
+  getMonthlySales(): Observable<BaseResponse<Map<string, number>>> {
+    return this.http.get<BaseResponse<Map<string, number>>>(`${this.apiUrl}/monthly-sales`);
+  }
 }
